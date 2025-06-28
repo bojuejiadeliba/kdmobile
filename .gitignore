@@ -1,0 +1,175 @@
+# Mobile CLIP Project .gitignore
+
+# ==========================================
+# MACHINE LEARNING / TRAINING ARTIFACTS
+# ==========================================
+
+# Model checkpoints and weights
+checkpoints/
+*.ckpt
+*.pth
+*.pt
+models/*.pth
+models/*.pt
+
+# Training logs and metrics
+wandb/
+logs/
+lightning_logs/
+tensorboard_logs/
+mlruns/
+figures/
+
+# Datasets (usually too large for git)
+datasets/
+eval_datasets/
+data/
+*.tar.gz
+*.zip
+
+# ==========================================
+# PYTHON
+# ==========================================
+# Analysis and figure generation scripts
+fig_*.py
+check_weights.py
+epoch_check.py
+inspect_checkpoint.py
+gradio_app.py
+oxford_pets.py
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# ==========================================
+# DEVELOPMENT TOOLS
+# ==========================================
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+
+# ==========================================
+# PROJECT SPECIFIC
+# ==========================================
+
+# Configuration files with sensitive data
+config_local.yaml
+secrets.yaml
+
+# Temporary files
+temp/
+tmp/
+*.tmp
+
+# Output files
+outputs/
+results/
+experiments/
+multi_eval_*
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# ==========================================
+# LARGE FILES (Use Git LFS if needed)
+# ==========================================
+
+# Large model files (use git lfs if needed)
+*.bin
+*.safetensors
+
+# Large data files
+*.csv
+*.json
+*.pkl
+*.pickle
+*.xlsx
+*.pdf
+~$*.xlsx
+# Images (if too many/large)
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+*.tiff
+*.svg

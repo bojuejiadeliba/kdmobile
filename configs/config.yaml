@@ -1,0 +1,65 @@
+---
+lr: 0.001
+min_lr: 0.000001
+weight_decay: 0.0001
+T_0: 500
+train_batch_size: 16
+val_batch_size: 32
+clip_grad_val: 20.0
+text_model_name: "lite_transformer"
+text_model:
+  num_embeddings: 49409
+  padding_idx: 49408
+  max_seq_length: 77
+  embedding_dim: 512
+  lr: 0.00001
+  weight_decay: 0.0001
+
+  transformer_encoder:
+    num_heads: 8
+    dropout_rate: 0.3
+
+  lconv:
+    num_heads: 8
+    kernel_size: [15, 15, 31, 31, 31, 31, 63, 63, 63, 63, 63, 63]
+    padding: "same"
+    weight_softmax: True
+    bias: False
+    dropout_rate: 0.3
+
+  n_blocks: 12
+  output_dim: 512
+  dropout_rate: 0.3
+  last_layer_norm: False
+  pos_encoding_dropout_rate: 0.1
+  ffn_embedding_dim: 1024
+  prior: False
+
+image_model:
+  model_name: "mobilenetv3_large"
+  alpha: 1.0
+  output_dim: 1280 # #1024 #
+  prior: True
+  lr: 0.0001
+  weight_decay: 0.0001
+
+clip_model:
+  proj_dim: 2048
+  tau: 0.07
+  dropout_rate: 0.3
+
+convbert_model:
+  num_attention_heads: 8
+  num_hidden_layers: 512
+  pretrained: true
+  output_dim: 768
+
+#knowledge_distillation:
+#  teacher_model: "openai/clip-vit-base-patch32"  # Use OpenAI's CLIP as teacher
+#  original_weight: 0.4      # Weight for original contrastive loss
+#  img_distill_weight: 0.15   # Weight for image feature distillation
+#  txt_distill_weight: 0.15   # Weight for text feature distillation
+#  response_weight: 0.3      # Weight for response distillation
+#  #temperature: 0.07         # For student's contrastive loss
+#  distill_temperature: 4.0  # For response distillation (KL divergence)
+#  use_projection: true      # Whether to use projection layers for dimension matching

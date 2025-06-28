@@ -1,0 +1,105 @@
+ python train_coco.py  `
+ --train_data_path "D:\AU\Dissertation\KLCaption\data\coco2017\train2017_coco.csv"  `
+ --val_data_path "D:\AU\Dissertation\KLCaption\data\coco2017\val2017_coco.csv"  `
+ --max_epochs 1  `
+ --data_size 0.01  `
+ --checkpoint_dir "D:\AU\Dissertation\KLMobileProject\checkpoints"  `
+ --checkpoint_filename "clip_mobile_test" --config_path ./configs/config.yaml
+
+python evaluate_models.py `
+--dataset caltech_256 `
+--model_checkpoint "D:\AU\Dissertation\KLMobileProject\checkpoints\clip_mobile_test-v1.ckpt"   `
+--config_path "D:\AU\Dissertation\KLMobileProject\configs\config.yaml"   `
+--prompt "a photo of a"   `
+--root_dir "./eval_datasets"
+
+python evaluate_models.py `
+--dataset fgcv_aircraft `
+--model_checkpoint "D:\AU\Dissertation\KLMobileProject\checkpoints\clip_mobile_test-v1.ckpt"   `
+--config_path "D:\AU\Dissertation\KLMobileProject\configs\config.yaml"   `
+--prompt "a photo of a"   `
+--root_dir "./eval_datasets"
+
+python evaluate_models.py `
+--dataset cifar10 `
+--model_checkpoint "D:\AU\Dissertation\KLMobileProject\checkpoints\clip_mobile_test-v1.ckpt"   `
+--config_path "D:\AU\Dissertation\KLMobileProject\configs\config.yaml"   `
+--prompt "a photo of a"   `
+--root_dir "./eval_datasets"
+
+
+python train_coco_kd.py `
+--train_data_path "D:\AU\Dissertation\KLCaption\data\coco2017\train2017_coco.csv" `
+--val_data_path "D:\AU\Dissertation\KLCaption\data\coco2017\val2017_coco.csv" `
+--config_path './configs/config.yaml' `
+--max_epochs 5 `
+--data_size 0.01 `
+--checkpoint_dir "D:\AU\Dissertation\KLMobileProject\checkpoints" `
+--checkpoint_filename "kd_coco_test" `
+--base_checkpoint "D:\\AU\\Dissertation\\KLMobileProject\\checkpoints\\clip_mobile_test-v1.ckpt"
+
+#kd_coco-epoch=00-val_loss=1.1048.ckpt
+python evaluate_models_kd.py  `
+--dataset cifar10 `
+--model_checkpoint "D:\AU\Dissertation\KLMobileProject\checkpoints\kd_coco-epoch=02-val_loss=0.9199.ckpt"   `
+--config_path "D:\AU\Dissertation\KLMobileProject\configs\config.yaml"    `
+--prompt "a photo of a"    `
+--root_dir "./eval_datasets"  `
+--save_results "results/student_cifar10.json"
+
+python evaluate_models_kd.py  `
+--dataset caltech_256 `
+--model_checkpoint "D:\AU\Dissertation\KLMobileProject\checkpoints\kd_coco-epoch=02-val_loss=0.9199.ckpt"   `
+--config_path "D:\AU\Dissertation\KLMobileProject\configs\config.yaml"    `
+--prompt "a photo of a"    `
+--root_dir "./eval_datasets"  `
+--save_results "results/student_cifar10.json"
+
+python debug_base_checkpoint.py "D:\AU\Dissertation\KLMobileProject\checkpoints\clip_mobile_test-v1.ckpt"
+
+python evaluate_clip_kd.py `
+--dataset cifar10 `
+--prompt "a photo of a" `
+--root_dir "./eval_datasets"
+
+python evaluate_clip_kd.py `
+--dataset caltech_256 `
+--prompt "a photo of a" `
+--root_dir "./eval_datasets"
+
+## auto training:
+python train_coco_kd.py `
+--train_data_path "D:\AU\Dissertation\KLCaption\data\coco2017\train2017_coco.csv" `
+--val_data_path "D:\AU\Dissertation\KLCaption\data\coco2017\val2017_coco.csv" `
+--config_path "D:\AU\Dissertation\KLMobileProject\configs\config.yaml" `
+--auto_kd_config "D:\AU\Dissertation\KLMobileProject\configs\config_kd.yaml" `
+--base_checkpoint "D:\\AU\\Dissertation\\KLMobileProject\\checkpoints\\clip_mobile_test-v1.ckpt" `
+--max_epochs 3 `
+--data_size 0.01
+
+# Test manual KD fallback (without --auto_kd_config or with non-existent file)
+python train_coco_kd.py `
+    --train_data_path /path/to/train.csv  `
+    --val_data_path /path/to/val.csv `
+    --config_path /path/to/config.yaml  `
+    --teacher_model openai/clip-vit-base-patch32
+
+
+python evaluate_all.py  `
+--base_checkpoint "D:\AU\Dissertation\KLMobileProject\checkpoints\clip_mobile_test-v1.ckpt"  `
+--student_checkpoint "D:\AU\Dissertation\KLMobileProject\checkpoints\kd_coco-epoch=02-val_loss=0.9199.ckpt"  `
+--config_path "D:\AU\Dissertation\KLMobileProject\configs\config.yaml"  `
+--datasets fgcv_aircraft
+
+python evaluate_all.py  `
+--base_checkpoint "D:\AU\Dissertation\KLMobileProject\checkpoints\clip_mobile_test-v1.ckpt"  `
+--student_checkpoint "D:\AU\Dissertation\KLMobileProject\checkpoints\kd_coco-epoch=02-val_loss=0.9199.ckpt"  `
+--config_path "D:\AU\Dissertation\KLMobileProject\configs\config.yaml"  `
+--datasets caltech_256
+
+
+python analyze_model_efficiency.py  `
+--base_checkpoint "D:\AU\Dissertation\KLMobileProject\checkpoints\clip_mobile_test-v1.ckpt"  `
+--student_checkpoint "D:\AU\Dissertation\KLMobileProject\checkpoints\kd_coco-epoch=02-val_loss=0.9199.ckpt"  `
+--config_path "D:\AU\Dissertation\KLMobileProject\configs\config.yaml"  `
+--include_teacher

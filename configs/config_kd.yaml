@@ -1,0 +1,88 @@
+# config_automatic_kd.yaml
+knowledge_distillation:
+  teacher_model: "openai/clip-vit-base-patch32"
+#  original_weight: 0.7
+#  img_distill_weight: 0.15
+#  txt_distill_weight: 0.15
+#  response_weight: 0.0  # Start with 0, will increase in phase 3
+  distill_temperature: 4.0
+# Automatic Knowledge Distillation Configuration
+automatic_kd:
+  # Progressive training phases (steps)
+  phase_1_steps: 1000    # Original loss only (let student stabilize)
+  phase_2_steps: 2000    # Add feature distillation
+  phase_3_steps: 3000    # Add response distillation
+
+  # Automatic weight adaptation
+  adaptation_rate: 0.01         # How fast to adapt weights (0.01 = slow, 0.1 = fast)
+  adaptation_strategy: "gradient_norm"  # "magnitude", "gradient_norm", "uncertainty"
+
+  # Temperature scheduling
+  min_temperature: 4.0          # Final temperature (sharper)
+  max_temperature: 8.0          # Initial temperature (softer)
+
+  # Performance monitoring
+  plateau_patience: 50          # Steps to wait before switching strategy
+  gradient_check_frequency: 10  # How often to compute gradient norms
+
+  # Loss balancing options
+  use_cosine_similarity: true   # Use cosine instead of MSE for features
+  normalize_losses: true        # Normalize losses to similar scales
+  smooth_weight_updates: true   # Smooth weight transitions
+
+# Model settings (same as before)
+image_model:
+  model_name: "mobilenetv3_large"
+  alpha: 1.0
+  output_dim: 1280 # #1024 #
+  prior: True
+  lr: 0.0001
+  weight_decay: 0.0001
+
+text_model:
+  num_embeddings: 49409
+  padding_idx: 49408
+  max_seq_length: 77
+  embedding_dim: 512
+  lr: 0.00001
+  weight_decay: 0.0001
+
+  transformer_encoder:
+    num_heads: 8
+    dropout_rate: 0.3
+
+  lconv:
+    num_heads: 8
+    kernel_size: [15, 15, 31, 31, 31, 31, 63, 63, 63, 63, 63, 63]
+    padding: "same"
+    weight_softmax: True
+    bias: False
+    dropout_rate: 0.3
+
+  n_blocks: 12
+  output_dim: 512
+  dropout_rate: 0.3
+  last_layer_norm: False
+  pos_encoding_dropout_rate: 0.1
+  ffn_embedding_dim: 1024
+  prior: False
+
+clip_model:
+  proj_dim: 2048
+  tau: 0.07
+  dropout_rate: 0.3
+
+# Training settings
+train_batch_size: 16
+val_batch_size: 32
+#max_steps: 5000  # Use steps instead of epochs for better control
+max_epochs: 30  # Maximum epochs to run
+
+# Optimizer (automatic setup)
+base_lr: 1e-4
+weight_decay: 1e-5
+
+logging:
+  log_every_n_steps: 10
+  save_weights_every: 50  # Save weight snapshots
+  validation_frequency: 500  # Validate every 500 steps
